@@ -46,6 +46,3 @@ class PubSubMixin(object):
             return self.pubsub.unsubscribe(topic)
         except Exception:
             logging.exception("Unable to unsubscribe to %s", topic)
-
-    def get_user(self, user_id, q=None):
-        return self.pubsub.get_user(user_id, q)

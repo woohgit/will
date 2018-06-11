@@ -1,12 +1,24 @@
 from will.plugin import WillPlugin
 from will.decorators import respond_to, periodic, hear, randomly, route, rendered_template, require_settings
 from will import settings
+from will.backends.io_adapters.hipchat import USER_DETAILS_URL
 
 import datetime
 import pygerduty
+import requests
 
 
 class PagerDutyPlugin(WillPlugin):
+
+    def get_user(self, user_id, q=None):
+        url = USER_DETAILS_URL % {"server": settings.HIPCHAT_SERVER,
+                                  "user_id": user_id,
+                                  "token": settings.HIPCHAT_V2_TOKEN}
+        r = requests.get(url, **settings.REQUESTS_OPTIONS)
+        if q:
+            q.put(r.json())
+        else:
+            return r.json()
 
     @staticmethod
     def _associate_pd_user(email_address, pager):
