@@ -26,7 +26,7 @@ class PagerDutyPlugin(WillPlugin):
 
     def _update_incident(self, message, incidents, action, assign_to_email=None):
         pager = pygerduty.PagerDuty(settings.PAGERDUTY_SUBDOMAIN, settings.PAGERDUTY_API_KEY)
-        email_address = self.get_user(message.sender['hipchat_id'])['email']
+        email_address = self.get_hipchat_user(message['sender']['id'])['email']
         user = self._associate_pd_user(email_address, pager)
         if user is None:
             self.reply("I couldn't find your user :(")
@@ -132,7 +132,7 @@ class PagerDutyPlugin(WillPlugin):
         pager = pygerduty.PagerDuty(settings.PAGERDUTY_SUBDOMAIN, settings.PAGERDUTY_API_KEY)
         for service in pager.services.list(limit=50):
             if service.name == service_name:
-                user = self._associate_pd_user(self.get_user(message.sender['hipchat_id'])['email'], pager)
+                user = self._associate_pd_user(self.get_hipchat_user(message['sender']['id'])['email'], pager)
                 if user is None:
                     self.reply("I couldn't find your user :(", color="yellow")
                     return
