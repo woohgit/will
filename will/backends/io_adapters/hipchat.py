@@ -531,7 +531,7 @@ class HipChatBackend(IOBackend, HipChatRosterMixin, HipChatRoomMixin, StorageMix
                 return self.get_room_from_name_or_id(settings.HIPCHAT_DEFAULT_ROOM)["room_id"]
         return False
 
-    def get_hipchat_user(self, user_id, q=None):
+    def get_user(self, user_id, q=None):
         url = USER_DETAILS_URL % {"server": settings.HIPCHAT_SERVER,
                                   "user_id": user_id,
                                   "token": settings.HIPCHAT_V2_TOKEN}
